@@ -1,7 +1,7 @@
-import { INote } from "./Note.d";
+import { INote } from "@/interfaces";
 export interface ICardWilderProps {
   id: number;
   firstName: string;
-  getWilders: any;
+  getWilders: () => void;
   notes: INote[];
 }

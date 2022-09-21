@@ -1,15 +1,14 @@
 import axios from "axios";
 import CardWilder from "./../components/CardWilder";
-import CreateWilder from "./CreateWilder";
 import { useState, useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { IWilder } from "@/interfaces";
 import "./Accueil.css";
 function Accueil() {
-  const [wilders, setWilders] = useState([]);
+  const [wilders, setWilders] = useState<IWilder[]>([]);
 
-  const getWilders = () => {
+  const getWilders = (): void => {
     axios.get("/wilders").then((response) => {
       console.log(response);
       setWilders(response.data.wilders);

@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, FormEvent, ChangeEvent } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import NoteInput from "../components/NoteInput";
 import { useParams, useNavigate } from "react-router-dom";
-function CreateWilder(props) {
+import { ILanguage, INoteInfos } from "@/interfaces";
+function CreateWilder() {
   const params = useParams();
   const navigate = useNavigate();
   const { id } = params;
@@ -13,8 +14,8 @@ function CreateWilder(props) {
     age: "",
   });
 
-  const [languages, setLanguages] = useState([]);
-  const [notes, setNotes] = useState([]); //{ note: 3, languageId: 1}
+  const [languages, setLanguages] = useState<ILanguage[]>([]);
+  const [notes, setNotes] = useState<INoteInfos[]>([]); //{ note: 3, languageId: 1}
   const canBeSubmit = () => {
     return !state.first_name || !state.last_name || !state.age;
   };
@@ -30,9 +31,9 @@ function CreateWilder(props) {
         })
         .catch((err) => {
           console.log(err.response.status);
-            if (err.response.status === 404){
-              toast("Ce wilder n'existe pas",{type: "error"})
-            }
+          if (err.response.status === 404) {
+            toast("Ce wilder n'existe pas", { type: "error" });
+          }
         });
     } else {
       setState({
@@ -46,8 +47,8 @@ function CreateWilder(props) {
     });
   }, [id]);
 
-
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent) => {
+    // const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault(); //On stoppe le comportement initial du onSubmit
     if (state.first_name && state.last_name && state.age) {
       if (id) {
@@ -84,30 +85,32 @@ function CreateWilder(props) {
     }
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     let name = e.target.name; //first_name
     let value = e.target.value; //
     setState({ ...state, [name]: value });
   };
 
   const addNote = () => {
-    setNotes([...notes, { note: "", languageId: "" }]);
+    setNotes([...notes, { note: null, languageId: null }]);
   };
 
-  const handleChangeNote = (e) => {
+  const handleChangeNote = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     let value = e.target.value;
     let noteIndex = e.target.dataset.noteindex;
     let name = e.target.name;
     console.log("INFOS", value, noteIndex, name);
-    
-    let newNotes = [...notes]
-    newNotes[noteIndex][name] = value; 
+
+    let newNotes = [...notes];
+    newNotes[noteIndex][name] = value;
     setNotes(newNotes);
   };
-  
+
   useEffect(() => {
     console.log("DEPUIS USEEFFECT", notes);
-  }, [notes])
+  }, [notes]);
 
   return (
     <div>
