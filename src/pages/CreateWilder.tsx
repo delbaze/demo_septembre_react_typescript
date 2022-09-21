@@ -3,7 +3,7 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import NoteInput from "../components/NoteInput";
 import { useParams, useNavigate } from "react-router-dom";
-import { ILanguage, INoteInfos } from "@/interfaces";
+import { ILanguage, INewNotes, INoteInfos } from "@/interfaces";
 function CreateWilder() {
   const params = useParams();
   const navigate = useNavigate();
@@ -101,11 +101,12 @@ function CreateWilder() {
     let value = e.target.value;
     let noteIndex = e.target.dataset.noteindex;
     let name = e.target.name;
-    console.log("INFOS", value, noteIndex, name);
 
-    let newNotes = [...notes];
-    newNotes[noteIndex][name] = value;
-    setNotes(newNotes);
+    let newNotes: INewNotes = { notes: [...notes] };
+    if (noteIndex) {
+      newNotes[noteIndex][name] = value;
+      setNotes(newNotes.notes);
+    }
   };
 
   useEffect(() => {

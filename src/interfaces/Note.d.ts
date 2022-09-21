@@ -19,6 +19,10 @@ export interface INoteInput {
   noteIndex: number;
 }
 
+export interface INewNotes{
+    [key: string] : any;
+    notes: INotes[];
+}
 // {
 //     "id": 1,
 //     "note": 10,
