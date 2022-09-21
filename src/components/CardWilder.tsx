@@ -3,7 +3,10 @@ import logo from "./person.png";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-function CardWilder({ id, firstName, getWilders, notes }) {
+
+// import {ICardWilderProps} from "../interfaces/CardWilder.d"
+import { ICardWilderProps } from "@/interfaces";
+function CardWilder({ id, firstName, getWilders, notes }: ICardWilderProps) {
   const handleDelete = () => {
     axios
       .delete("/wilders/delete", {
@@ -34,9 +37,11 @@ function CardWilder({ id, firstName, getWilders, notes }) {
       <div className="cardLanguages">
         <h4>Langages</h4>
         <ul>
-        {notes.map((n) => (
-          <li key={n.id}>{n.language.label}: {n.note}</li>
-        ))}
+          {notes.map((n) => (
+            <li key={n.id}>
+              {n.language.label}: {n.note}
+            </li>
+          ))}
         </ul>
       </div>
       <Link to={`/edit/${id}`}>Editer</Link>
