@@ -7,6 +7,7 @@ export interface INote {
 }
 
 export interface INoteInfos {
+  [key: string] : any
   note: number | null;
   languageId: number | null;
 }
@@ -20,7 +21,7 @@ export interface INoteInput {
 }
 
 export interface INewNotes{
-    [key: string] : any;
+    // [key: string] : any;
     notes: INotes[];
 }
 // {

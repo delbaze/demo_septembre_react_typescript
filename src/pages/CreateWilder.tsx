@@ -67,11 +67,10 @@ function CreateWilder() {
             console.log(err);
           });
       } else {
-        console.log("CREATION", id);
+        console.log("🟩🟩🟩🟩🟩 ~ file: CreateWilder.tsx ~ line 72 ~ //handleSubmit ~ notes", notes)
         axios
-          .post("/wilders/create", state)
+          .post("/wilders/create", {...state, notes})
           .then(function (response) {
-            console.log(response);
             toast(response.data.message, {
               type: response.data.success ? "success" : "error",
             });
@@ -99,14 +98,25 @@ function CreateWilder() {
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     let value = e.target.value;
-    let noteIndex = e.target.dataset.noteindex;
+    let noteIndex = e.target.dataset.noteindex as any as number;
     let name = e.target.name;
 
-    let newNotes: INewNotes = { notes: [...notes] };
+    let newNotes =  [...notes];
     if (noteIndex) {
       newNotes[noteIndex][name] = value;
-      setNotes(newNotes.notes);
+      setNotes(newNotes);
     }
+    // let value = e.target.value;
+    // let noteIndex = e.target.dataset.noteindex as any as number;
+    // let name = e.target.name;
+
+    // let newNotes: INewNotes = { notes: [...notes] };
+    // if (noteIndex) {
+    //   newNotes.notes[noteIndex][name] = value;
+
+    //   console.log(newNotes.notes[noteIndex]);
+    //   setNotes(newNotes.notes);
+    // }
   };
 
   useEffect(() => {
