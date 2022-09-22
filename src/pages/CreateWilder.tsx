@@ -165,7 +165,7 @@ function CreateWilder() {
               languages={languages}
               key={index}
               note={n.note}
-              languageId={n.language.id}
+              languageId={n.language?.id}
               noteIndex={index}
               handleChangeNote={handleChangeNote}
             />
