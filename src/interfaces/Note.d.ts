@@ -8,8 +8,9 @@ export interface INote {
 
 export interface INoteInfos {
   [key: string] : any
-  note: number | null;
-  languageId: number | null;
+  id?: number;
+  note: string;
+  languageId: string;
 }
 
 export interface INoteInput {
@@ -18,10 +19,12 @@ export interface INoteInput {
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => void;
   noteIndex: number;
+  note: string;
+  languageId: string;
 }
 
 export interface INewNotes{
-    // [key: string] : any;
+    [key: string] : any;
     notes: INotes[];
 }
 // {

@@ -27,6 +27,11 @@ function CreateWilder() {
           console.log(response);
           if (response.data.success) {
             setState(response.data.wilder);
+            if (response.data.wilder.notes.length > 0) {
+              console.log("🟩🟩🟩🟩🟩 ~ file: CreateWilder.tsx ~ line 32 ~ .then ~ response.data.wilder.notes", response.data.wilder.notes)
+              setNotes(response.data.wilder.notes);
+            }
+        
           }
         })
         .catch((err) => {
@@ -67,9 +72,8 @@ function CreateWilder() {
             console.log(err);
           });
       } else {
-        console.log("🟩🟩🟩🟩🟩 ~ file: CreateWilder.tsx ~ line 72 ~ //handleSubmit ~ notes", notes)
         axios
-          .post("/wilders/create", {...state, notes})
+          .post("/wilders/create", { ...state, notes })
           .then(function (response) {
             toast(response.data.message, {
               type: response.data.success ? "success" : "error",
@@ -91,7 +95,7 @@ function CreateWilder() {
   };
 
   const addNote = () => {
-    setNotes([...notes, { note: null, languageId: null }]);
+    setNotes([...notes, { note: "", languageId: "" }]);
   };
 
   const handleChangeNote = (
@@ -101,7 +105,7 @@ function CreateWilder() {
     let noteIndex = e.target.dataset.noteindex as any as number;
     let name = e.target.name;
 
-    let newNotes =  [...notes];
+    let newNotes = [...notes];
     if (noteIndex) {
       newNotes[noteIndex][name] = value;
       setNotes(newNotes);
@@ -160,6 +164,8 @@ function CreateWilder() {
             <NoteInput
               languages={languages}
               key={index}
+              note={n.note}
+              languageId={n.language.id}
               noteIndex={index}
               handleChangeNote={handleChangeNote}
             />
