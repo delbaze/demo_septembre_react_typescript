@@ -13,6 +13,7 @@ function CreateWilder() {
     last_name: "",
     age: "",
   });
+  const [noMoreSelected, setNoMoreSelected] = useState<boolean>(false);
 
   const [languages, setLanguages] = useState<ILanguage[]>([]);
   const [notes, setNotes] = useState<INoteInfos[]>([]); //{ note: 3, languageId: 1}
@@ -24,14 +25,11 @@ function CreateWilder() {
       axios
         .get(`/wilders/${id}`)
         .then((response) => {
-          console.log(response);
           if (response.data.success) {
             setState(response.data.wilder);
             if (response.data.wilder.notes.length > 0) {
-              console.log("🟩🟩🟩🟩🟩 ~ file: CreateWilder.tsx ~ line 32 ~ .then ~ response.data.wilder.notes", response.data.wilder.notes)
               setNotes(response.data.wilder.notes);
             }
-        
           }
         })
         .catch((err) => {
@@ -46,6 +44,7 @@ function CreateWilder() {
         last_name: "",
         age: "",
       });
+      setNotes([]);
     }
     axios.get("/languages").then((response) => {
       setLanguages(response.data.languages);
@@ -59,9 +58,8 @@ function CreateWilder() {
       if (id) {
         //edition
         axios
-          .patch(`/wilders/update/${id}`, state)
+          .patch(`/wilders/update/${id}`, { ...state, notes })
           .then((response) => {
-            console.log(response);
             if (response.data.wilder.affected !== 0) {
               navigate("/", { replace: true });
             } else {
@@ -95,7 +93,7 @@ function CreateWilder() {
   };
 
   const addNote = () => {
-    setNotes([...notes, { note: "", languageId: "" }]);
+    setNotes([...notes, { note: "", language: {} }]);
   };
 
   const handleChangeNote = (
@@ -104,28 +102,28 @@ function CreateWilder() {
     let value = e.target.value;
     let noteIndex = e.target.dataset.noteindex as any as number;
     let name = e.target.name;
-
     let newNotes = [...notes];
     if (noteIndex) {
-      newNotes[noteIndex][name] = value;
+      if (name !== "language") {
+        newNotes[noteIndex][name] = value;
+      } else {
+        newNotes[noteIndex][name]["id"] = value;
+      }
       setNotes(newNotes);
     }
-    // let value = e.target.value;
-    // let noteIndex = e.target.dataset.noteindex as any as number;
-    // let name = e.target.name;
-
-    // let newNotes: INewNotes = { notes: [...notes] };
-    // if (noteIndex) {
-    //   newNotes.notes[noteIndex][name] = value;
-
-    //   console.log(newNotes.notes[noteIndex]);
-    //   setNotes(newNotes.notes);
-    // }
   };
-
   useEffect(() => {
-    console.log("DEPUIS USEEFFECT", notes);
-  }, [notes]);
+    setNoMoreSelected(notes.length === languages.length);
+  }, [notes, languages]);
+
+  const deleteNote = (e: FormEvent<HTMLButtonElement>): void => {
+    let noteIndex = e.currentTarget.getAttribute(
+      "data-noteindex"
+    ) as any as number;
+    let listNotes = [...notes];
+    listNotes.splice(noteIndex, 1);
+    setNotes(listNotes);
+  };
 
   return (
     <div>
@@ -157,23 +155,27 @@ function CreateWilder() {
             required
             value={state.age}
           />
-          <button type="button" onClick={addNote}>
-            Ajouter une note
+          <button type="button" disabled={noMoreSelected} onClick={addNote}>
+            {noMoreSelected
+              ? "Plus de langages disponibles"
+              : "Ajouter une note"}
           </button>
           {notes.map((n, index) => (
             <NoteInput
               languages={languages}
               key={index}
               note={n.note}
-              languageId={n.language?.id}
+              languageId={n.language.id}
               noteIndex={index}
               handleChangeNote={handleChangeNote}
+              deleteNote={deleteNote}
+              notes={notes}
             />
           ))}
         </div>
 
         <button type="submit" disabled={canBeSubmit()}>
-          Ajouter
+          {id ? "Editer" : "Ajouter"}
         </button>
       </form>
       <ToastContainer />

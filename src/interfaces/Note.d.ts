@@ -7,10 +7,11 @@ export interface INote {
 }
 
 export interface INoteInfos {
-  [key: string] : any
+  [key: string]: any;
   id?: number;
   note: string;
-  languageId: string;
+  language: ILanguage;
+  // languageId: string;
 }
 
 export interface INoteInput {
@@ -21,11 +22,13 @@ export interface INoteInput {
   noteIndex: number;
   note: string;
   languageId: string;
+  deleteNote: (e: FormEvent<HTMLButtonElement>) => void;
+  notes: INoteInfos[];
 }
 
-export interface INewNotes{
-    [key: string] : any;
-    notes: INotes[];
+export interface INewNotes {
+  [key: string]: any;
+  notes: INotes[];
 }
 // {
 //     "id": 1,

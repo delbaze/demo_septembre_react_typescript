@@ -1,7 +1,15 @@
-import { INoteInput } from "@/interfaces";
+import {  INoteInput } from "@/interfaces";
+import { ImBin2 } from "react-icons/im";
+function NoteInput({
+  languages,
+  handleChangeNote,
+  noteIndex,
+  note,
+  languageId,
+  deleteNote,
+  notes,
+}: INoteInput) {
 
-function NoteInput({ languages, handleChangeNote, noteIndex, note, languageId }: INoteInput) {
-  console.log("🟩🟩🟩🟩🟩 ~ file: NoteInput.tsx ~ line 4 ~ NoteInput ~ languageId", languageId)
   return (
     <div>
       <input
@@ -14,17 +22,24 @@ function NoteInput({ languages, handleChangeNote, noteIndex, note, languageId }:
       />
       <select
         data-noteindex={noteIndex}
-        name="languageId"
+        name="language"
         onChange={handleChangeNote}
         value={languageId}
       >
         <option value="">Choisissez un langage</option>
         {languages.map((l) => (
-          <option key={l.id} value={l.id}>
+          <option
+            key={l.id}
+            value={l.id}
+            hidden={ notes.some((n) => n.language.id == l.id)}
+          >
             {l.label}
           </option>
         ))}
       </select>
+      <button data-noteindex={noteIndex} type="button" onClick={deleteNote}>
+        <ImBin2 style={{ pointerEvents: "none" }} />
+      </button>
     </div>
   );
 }
