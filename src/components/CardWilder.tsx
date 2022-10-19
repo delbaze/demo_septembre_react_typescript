@@ -18,7 +18,7 @@ function CardWilder({ id, firstName, getWilders, notes }: ICardWilderProps) {
         toast(response.data.message, {
           type: response.data.success ? "success" : "error",
         });
-        getWilders();
+        // getWilders();
       })
       .catch((err) => {
         console.log(err);
